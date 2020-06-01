@@ -6,6 +6,8 @@ using UnityEngine;
 public class AtmosphereController : MonoBehaviour
 {
     public bool darkening;
+    public Light sun;
+    private Color safeColor;
     private float lightsideAngle;
     private float darksideAngle;
     // Start is called before the first frame update
@@ -14,6 +16,7 @@ public class AtmosphereController : MonoBehaviour
         darkening = false;
         lightsideAngle = 295f;
         darksideAngle = 30f;
+        safeColor = sun.color;
     }
 
     // Update is called once per frame
@@ -25,11 +28,13 @@ public class AtmosphereController : MonoBehaviour
         {
             expectedAngle = lightsideAngle;
             direction = -transform.forward;
+            sun.color = safeColor;
         }
         else
         {
             expectedAngle = darksideAngle;
             direction = transform.forward;
+            sun.color = Color.red;
         }
         if (Mathf.Abs(expectedAngle - transform.eulerAngles.z) > 1)
         {

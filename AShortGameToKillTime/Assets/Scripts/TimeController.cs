@@ -13,6 +13,8 @@ public class TimeController : MonoBehaviour
     public GameObject socketPanel;
     public GameObject gameOverController;
     private AudioSource ticking;
+    private AudioSource bellTolling;
+    private AudioSource drone;
     //TODO maybe find a way to get this from timePanel.
     public Text uiTimer;
     public GameObject timePanel;
@@ -32,7 +34,24 @@ public class TimeController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ticking = this.GetComponent<AudioSource>();
+        AudioSource[] sources = this.GetComponents<AudioSource>();
+        foreach(AudioSource source in this.GetComponents<AudioSource>())
+        {
+            switch (source.clip.name)
+            {
+                case "ticking":
+                    ticking = source;
+                    break;
+                case "BellsTolling":
+                    bellTolling = source;
+                    break;
+                case "Drone":
+                    drone = source;
+                    break;
+            }
+        }
+        ticking = sources[0];
+        bellTolling = sources[1];
         timeRemaining = startingTime * 60;
         damageIntervalTracker = 10;
         damageIntervalLength = 10;
@@ -62,6 +81,7 @@ public class TimeController : MonoBehaviour
                 {
                     ticking.volume = 1f;
                     ticking.pitch = 1.25f;
+                    drone.volume = 1f;
                     timeRemaining -= Time.deltaTime;
                     uiTimer.color = new Color(1f, 0f, 0f);
                     long secondsNumeric = (long)timeRemaining % 60;
@@ -75,8 +95,16 @@ public class TimeController : MonoBehaviour
                 {
                     ticking.pitch = 1f;
                     ticking.volume = .5f;
+                    drone.volume -= .75f * Time.deltaTime;
                 }
-                if (uiTimer.color.r == 1f && !damageAllowed)
+                if (!damageAllowed)
+                {
+                    bellTolling.volume -= .45f * Time.deltaTime;
+                } else
+                {
+                    bellTolling.volume += .45f * Time.deltaTime;
+                }
+                if (uiTimer.color.r == 1f && (!damageAllowed || !playerMarked))
                 {
                     uiTimer.color = new Color(1, 1, 1);
                 }
