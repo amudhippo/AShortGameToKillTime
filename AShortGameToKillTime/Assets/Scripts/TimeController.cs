@@ -12,6 +12,7 @@ public class TimeController : MonoBehaviour
     public GameObject atmosphere;
     public GameObject socketPanel;
     public GameObject gameOverController;
+    private AudioSource ticking;
     //TODO maybe find a way to get this from timePanel.
     public Text uiTimer;
     public GameObject timePanel;
@@ -31,6 +32,7 @@ public class TimeController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        ticking = this.GetComponent<AudioSource>();
         timeRemaining = startingTime * 60;
         damageIntervalTracker = 10;
         damageIntervalLength = 10;
@@ -58,6 +60,8 @@ public class TimeController : MonoBehaviour
                 dangerMeterHand.transform.Rotate(-dmhForward * 36 * Time.deltaTime, Space.World);
                 if (playerMarked && damageAllowed)
                 {
+                    ticking.volume = 1f;
+                    ticking.pitch = 1.25f;
                     timeRemaining -= Time.deltaTime;
                     uiTimer.color = new Color(1f, 0f, 0f);
                     long secondsNumeric = (long)timeRemaining % 60;
@@ -67,8 +71,12 @@ public class TimeController : MonoBehaviour
                         secondsString = "0" + secondsNumeric.ToString();
                     }
                     uiTimer.text = (long)(timeRemaining / 60) + ":" + secondsString;
+                } else
+                {
+                    ticking.pitch = 1f;
+                    ticking.volume = .5f;
                 }
-                else if (uiTimer.color.r == 1f)
+                if (uiTimer.color.r == 1f && !damageAllowed)
                 {
                     uiTimer.color = new Color(1, 1, 1);
                 }
