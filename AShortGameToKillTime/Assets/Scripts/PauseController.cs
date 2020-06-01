@@ -12,6 +12,8 @@ public class PauseController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
         paused = false;
     }
 
@@ -20,22 +22,37 @@ public class PauseController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
         {
-            if (paused)
-            {
-                player.SendMessage("UnPause");
-                timeController.SendMessage("UnPause");
-                cameraController.SendMessage("UnPause");
-                PauseMenu.SetActive(false);
-            }
-            else
-            {
-                player.SendMessage("Pause");
-                timeController.SendMessage("Pause");
-                cameraController.SendMessage("Pause");
-                PauseMenu.SetActive(true);
-            }
-            paused = !paused;
+            PauseSwitch();
         }
+    }
+    
+    public void PauseSwitch()
+    {
+        if (paused)
+        {
+            if (Cursor.lockState == CursorLockMode.None || Cursor.lockState == CursorLockMode.Confined)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+            }
+            player.SendMessage("UnPause");
+            timeController.SendMessage("UnPause");
+            cameraController.SendMessage("UnPause");
+            PauseMenu.SetActive(false);
+        }
+        else
+        {
+            if (Cursor.lockState == CursorLockMode.Locked)
+            {
+                Cursor.lockState = CursorLockMode.Confined;
+                Cursor.visible = true;
+            }
+            player.SendMessage("Pause");
+            timeController.SendMessage("Pause");
+            cameraController.SendMessage("Pause");
+            PauseMenu.SetActive(true);
+        }
+        paused = !paused;
     }
 
     public void QuitGame()
