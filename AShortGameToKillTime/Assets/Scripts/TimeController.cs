@@ -8,6 +8,7 @@ public class TimeController : MonoBehaviour
 {
     //TODO This is public for testing purposes. Please remove.
     public float startingTime;
+    public float totalTimeTracker;
     public GameObject player;
     public GameObject atmosphere;
     public GameObject socketPanel;
@@ -17,6 +18,8 @@ public class TimeController : MonoBehaviour
     private AudioSource drone;
     //TODO maybe find a way to get this from timePanel.
     public Text uiTimer;
+    public Text totalTimeTakenPause;
+    public Text totalTimeTakenEndGame;
     public GameObject timePanel;
     public Image dangerMeter;
     public Image dangerMeterHand;
@@ -53,6 +56,7 @@ public class TimeController : MonoBehaviour
         ticking = sources[0];
         bellTolling = sources[1];
         timeRemaining = startingTime * 60;
+        totalTimeTracker = 0f;
         damageIntervalTracker = 10;
         damageIntervalLength = 10;
         playerMarked = false;
@@ -65,6 +69,25 @@ public class TimeController : MonoBehaviour
     {
         if (!paused)
         {
+            totalTimeTracker += Time.deltaTime;
+            long secondsTaken = (long)totalTimeTracker;
+            string timeTaken = "0:";
+            if (secondsTaken >= 60)
+            {
+                timeTaken = Mathf.Floor((secondsTaken / 60)).ToString() + ":";
+            }
+            if ((secondsTaken % 60) < 10)
+            {
+                timeTaken += "0" + Mathf.Floor((secondsTaken % 60)).ToString();
+            }
+            else
+            {
+                timeTaken += Mathf.Floor((secondsTaken % 60)).ToString();
+            }
+
+            totalTimeTakenPause.text = "Overall time " + timeTaken;
+            totalTimeTakenEndGame.text = "Total Time Taken " + timeTaken;
+
             if (playerMarked)
             {
                 watchedIndicator.sprite = watched;

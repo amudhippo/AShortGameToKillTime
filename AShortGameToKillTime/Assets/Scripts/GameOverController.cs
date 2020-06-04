@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class GameOverController : MonoBehaviour
@@ -20,16 +21,18 @@ public class GameOverController : MonoBehaviour
     {
         if (gameOver)
         {
-            endGameTimer -= 1 * Time.deltaTime;
-            print(endGameTimer);
-            if (endGameTimer < 0)
-            {
-                #if UNITY_EDITOR
-                    UnityEditor.EditorApplication.isPlaying = false;
-                #else
-                    Application.Quit();
-                #endif
-            }
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;
+            //    endGameTimer -= 1 * Time.deltaTime;
+            //    print(endGameTimer);
+            //    if (endGameTimer < 0)
+            //    {
+            //        #if UNITY_EDITOR
+            //            UnityEditor.EditorApplication.isPlaying = false;
+            //        #else
+            //            Application.Quit();
+            //        #endif
+            //    }
         }
     }
 
