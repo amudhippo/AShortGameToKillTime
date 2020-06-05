@@ -63,4 +63,9 @@ public class PauseController : MonoBehaviour
                  Application.Quit();
         #endif
     }
+
+    public void RestartGame()
+    {
+        Application.LoadLevel(Application.loadedLevel);
+    }
 }
