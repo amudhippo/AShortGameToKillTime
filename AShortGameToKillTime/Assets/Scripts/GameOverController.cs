@@ -9,7 +9,6 @@ public class GameOverController : MonoBehaviour
     public GameObject LosingGameOverScreen;
     public GameObject WinningGameOverScreen;
     bool gameOver;
-    float endGameTimer = 5;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,16 +22,6 @@ public class GameOverController : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Confined;
             Cursor.visible = true;
-            //    endGameTimer -= 1 * Time.deltaTime;
-            //    print(endGameTimer);
-            //    if (endGameTimer < 0)
-            //    {
-            //        #if UNITY_EDITOR
-            //            UnityEditor.EditorApplication.isPlaying = false;
-            //        #else
-            //            Application.Quit();
-            //        #endif
-            //    }
         }
     }
 

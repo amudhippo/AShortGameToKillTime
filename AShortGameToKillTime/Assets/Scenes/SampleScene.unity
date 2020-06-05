@@ -4890,7 +4890,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25979df10187d9e42a84bf8561b42b73, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingTime: 0.1
+  startingTime: 0.5
   totalTimeTracker: 0
   player: {fileID: 660853364}
   atmosphere: {fileID: 1953400145}
