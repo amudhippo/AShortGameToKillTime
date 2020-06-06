@@ -36,7 +36,7 @@ public class AtmosphereController : MonoBehaviour
             direction = transform.forward;
             sun.color = Color.red;
         }
-        if (Mathf.Abs(expectedAngle - transform.eulerAngles.z) > 1)
+        if (Mathf.Abs(expectedAngle - transform.eulerAngles.z) > 5)
         {
             transform.Rotate(direction * Time.deltaTime * 100);
         }
