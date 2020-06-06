@@ -26,12 +26,15 @@ public class TimeController : MonoBehaviour
     public Image watchedIndicator;
     public Sprite watched;
     public Sprite notWatched;
+    public Material redEye;
+    public Material calm;
     private float timeRemaining;
     private float damageIntervalTracker;
     private float damageIntervalLength;
     bool playerMarked;
     bool damageAllowed;
     bool paused;
+    bool clockMaterialsUpdated;
 
     List<GameObject> clocks = new List<GameObject>();
     // Start is called before the first frame update
@@ -62,6 +65,7 @@ public class TimeController : MonoBehaviour
         playerMarked = false;
         damageAllowed = false;
         paused = false;
+        clockMaterialsUpdated = true;
     }
 
     // Update is called once per frame
@@ -96,7 +100,25 @@ public class TimeController : MonoBehaviour
             {
                 watchedIndicator.sprite = notWatched;
             }
-            if (timeRemaining > 1)
+            if (!clockMaterialsUpdated)
+            {
+                if (damageAllowed)
+                {
+                    foreach (GameObject clock in clocks)
+                    {
+                        clock.GetComponent<MeshRenderer>().material = redEye;
+                    }
+                }
+                else
+                {
+                    foreach (GameObject clock in clocks)
+                    {
+                        clock.GetComponent<MeshRenderer>().material = calm;
+                    }
+                }
+                clockMaterialsUpdated = true;
+            }
+            if (timeRemaining >= 1)
             {
                 Vector3 dmhForward = (this.GetComponent<Transform>()).forward;
                 dangerMeterHand.transform.Rotate(-dmhForward * 36 * Time.deltaTime, Space.World);
@@ -120,6 +142,7 @@ public class TimeController : MonoBehaviour
                     ticking.volume = .5f;
                     drone.volume -= .75f * Time.deltaTime;
                 }
+                damageIntervalTracker -= Time.deltaTime;
                 if (!damageAllowed)
                 {
                     bellTolling.volume -= .45f * Time.deltaTime;
@@ -145,13 +168,13 @@ public class TimeController : MonoBehaviour
                     {
                         dangerMeter.color = new Color(1.0f, 0.64f, 0.0f);
                     }
-                    damageIntervalTracker -= Time.deltaTime;
                 }
                 else
-                {
+                {             
                     damageAllowed = !damageAllowed;
                     atmosphere.SendMessage("FlipSwitch");
                     damageIntervalTracker = damageIntervalLength;
+                    clockMaterialsUpdated = false;
                 }
                 playerMarked = false;
                 foreach (GameObject clock in clocks)
@@ -168,9 +191,6 @@ public class TimeController : MonoBehaviour
                 gameOverController.SendMessage("GameLost");
             }
         }
-        
-        
-        //TODO tell all clocks that a tick has been recorded.
     }
 
     void MarkPlayer()
